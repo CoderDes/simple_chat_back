@@ -1,8 +1,6 @@
-import { ObjectId } from "bson";
 import { Schema, model } from "mongoose";
 
 const MessageSchema = new Schema({
-  _id: ObjectId,
   text: String,
   author: {
     type: String,

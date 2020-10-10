@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { messageValidation } from "./messages.validation";
+import { validate } from "../middlewares";
 import {
   getAllMessages,
   postMessage,
@@ -9,8 +11,8 @@ import {
 const router = Router();
 
 router.get("/all", getAllMessages);
-router.post("/post", postMessage);
-router.put("/update", updateMessage);
-router.delete("/delete", deleteMessage);
+router.post("/post", validate(messageValidation), postMessage);
+router.put("/update", validate(messageValidation), updateMessage);
+router.delete("/delete", validate(messageValidation), deleteMessage);
 
 export default router;
