@@ -17,5 +17,3 @@ export const registerUser = async (
     next(err);
   }
 };
-
-export const loginUser = async (req: Request, res: Response) => {};
