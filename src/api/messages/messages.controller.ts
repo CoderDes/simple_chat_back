@@ -1,17 +1,20 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import MessageModel from "./messages.model";
 
-export const postMessage = async (req: Request, res: Response) => {
-  const { text, author }: { text: string; author: string } = req.body;
-
+export const postMessage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
+    const { text, author }: { text: string; author: string } = req.body;
+
     const message = new MessageModel({ text, author });
     await message.save();
 
     res.send({ message: "Message posted successfully", id: message._id });
-  } catch (err) {
-    res.send({ message: "Failed to post message" });
-    new Error(err);
+  } catch (e) {
+    next(e);
   }
 };
 
