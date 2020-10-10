@@ -12,7 +12,7 @@ export const loginUser = async (
     const user: any = await UserModel.findOne({ email }).lean().exec();
 
     if (!compareSync(password, user.password)) {
-      throw { message: "Invalid password", status: 400 };
+      throw { message: "User is not found", status: 400 };
     }
 
     if (!user) {
