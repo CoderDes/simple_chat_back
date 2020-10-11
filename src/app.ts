@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cookieSession from "cookie-session";
 
 import api from "./api/index";
 
@@ -23,6 +24,13 @@ database.on("error", (err: Error) => {
   process.exit(1);
 });
 
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["some key"],
+    maxAge: 24 * 60 * 60 * 1000,
+  }),
+);
 app.use(express.json());
 app.use("/api", api);
 

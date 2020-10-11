@@ -12,11 +12,15 @@ export const loginUser = async (
     const user: any = await UserModel.findOne({ email }).lean().exec();
 
     if (!compareSync(password, user.password)) {
-      throw { message: "User is not found", status: 400 };
+      throw { message: "User is not found", status: 403 };
     }
 
     if (!user) {
       throw { message: "User is not found", status: 404 };
+    }
+
+    if (req.session !== null) {
+      req.session.user = user;
     }
 
     res.json({ _id: user._id });
