@@ -9,6 +9,14 @@ export const postMessage = async (
   try {
     const { text, author }: { text: string; author: string } = req.body;
 
+    const user: any = req.session?.user;
+
+    if (author != user.email) {
+      throw { message: `User ${author} IS NOT authorized` };
+    } else {
+      console.log(`User ${author} is authorized`);
+    }
+
     const message = new MessageModel({ text, author });
     await message.save();
 
