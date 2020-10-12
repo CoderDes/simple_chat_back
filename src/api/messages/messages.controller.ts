@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import usersModel from "../users/users.model";
 import MessageModel from "./messages.model";
 
 export const postMessage = async (
@@ -75,4 +76,26 @@ export const updateMessage = async (
   }
 };
 
-export const deleteMessage = async (req: Request, res: Response) => {};
+export const deleteMessage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.params;
+
+    const user = req.session?.user;
+
+    if (!user) {
+      throw { message: "To delete message, you need be authorized" };
+    }
+
+    const result = await MessageModel.deleteOne({ _id: id });
+
+    console.log(result);
+
+    res.status(200).json({ message: "Message deleted", id: id });
+  } catch (err) {
+    next(err);
+  }
+};
