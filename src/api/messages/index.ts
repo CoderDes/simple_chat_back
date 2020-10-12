@@ -12,7 +12,7 @@ const router = Router();
 
 router.get("/all", getAllMessages);
 router.post("/post", validate(messageValidation), postMessage);
-router.put("/update", validate(messageValidation), updateMessage);
+router.put(`/update/:id`, validate(messageValidation), updateMessage);
 router.delete("/delete", validate(messageValidation), deleteMessage);
 
 export default router;

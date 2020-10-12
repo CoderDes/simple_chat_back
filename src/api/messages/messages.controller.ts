@@ -35,16 +35,44 @@ export const getAllMessages = async (
     const user: any = req.session?.user;
 
     if (!user) {
-      throw { message: "You need to authorize to get messages" };
+      throw { message: "You need to authorize to update message" };
     }
 
-    const allMessages = await MessageModel.find({}).lean().exec();
+    const allMessages: Array<object> = await MessageModel.find({})
+      .lean()
+      .exec();
+
     res.status(200).json(allMessages);
   } catch (err) {
     next(err);
   }
 };
 
-export const updateMessage = async (req: Request, res: Response) => {};
+export const updateMessage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { text }: { text: string } = req.body;
+  const id: string = req.params.id;
+
+  try {
+    const user: any = req.session?.user;
+
+    if (!user) {
+      throw { message: "You need to authorize to get messages" };
+    }
+
+    await MessageModel.updateOne(
+      { _id: id },
+      { text: text, updatedAt: Date.now() },
+      { multipleCastError: true },
+    );
+
+    res.status(200).send({ message: "Message updated successfully", id: id });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const deleteMessage = async (req: Request, res: Response) => {};
