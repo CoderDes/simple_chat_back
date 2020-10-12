@@ -26,7 +26,24 @@ export const postMessage = async (
   }
 };
 
-export const getAllMessages = async (req: Request, res: Response) => {};
+export const getAllMessages = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const user: any = req.session?.user;
+
+    if (!user) {
+      throw { message: "You need to authorize to get messages" };
+    }
+
+    const allMessages = await MessageModel.find({}).lean().exec();
+    res.status(200).json(allMessages);
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const updateMessage = async (req: Request, res: Response) => {};
 
