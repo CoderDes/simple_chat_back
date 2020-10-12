@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import usersModel from "../users/users.model";
 import MessageModel from "./messages.model";
 
 export const postMessage = async (
