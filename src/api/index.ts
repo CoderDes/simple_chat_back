@@ -6,6 +6,12 @@ import messages from "./messages/index";
 
 const router = Router();
 
+router.use("/*", (req, res, next) => {
+  res.set("Access-Control-Allow-Headers", "*");
+  res.set("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 router.use("/users", users);
 router.use("/auth", auth);
 router.use("/messages", messages);
