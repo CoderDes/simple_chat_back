@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cookieSession from "cookie-session";
 
 import api from "./api/index";
+import { generateSessionKey } from "./api/utils";
 
 const port: string | number = process.env.PORT || 3000;
 
@@ -27,7 +28,7 @@ database.on("error", (err: Error) => {
 app.use(
   cookieSession({
     name: "session",
-    keys: ["some key"],
+    keys: [generateSessionKey(), generateSessionKey()],
     maxAge: 24 * 60 * 60 * 1000,
   }),
 );
