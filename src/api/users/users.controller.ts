@@ -17,3 +17,17 @@ export const registerUser = async (
     next(err);
   }
 };
+
+export const getUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const id: string = req.params.id;
+    const user = await UserModel.findOne({ _id: id }).lean().exec();
+    res.status(200).json(user);
+  } catch (err) {
+    next(err);
+  }
+};

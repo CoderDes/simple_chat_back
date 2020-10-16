@@ -28,3 +28,18 @@ export const loginUser = async (
     next(err);
   }
 };
+
+export const checkSession = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
+  try {
+    if (req.session && !req.session.isNew) {
+      const { _id } = req.session.user;
+      res.status(200).json({ _id });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
