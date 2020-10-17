@@ -1,11 +1,12 @@
 import express from "express";
 import mongoose from "mongoose";
-import cookieSession from "cookie-session";
+import session from "express-session";
+import connectMongo from "connect-mongo";
 
 import api from "./api/index";
 import { generateSessionKey } from "./api/utils";
 
-const port: string | number = process.env.PORT || 3000;
+const port: string | number = process.env.PORT || 3001;
 
 const app: express.Application = express();
 
@@ -25,13 +26,22 @@ database.on("error", (err: Error) => {
   process.exit(1);
 });
 
+const MongoStore = connectMongo(session);
+
+app.set("trust proxy", 1);
 app.use(
-  cookieSession({
-    name: "session",
-    keys: [generateSessionKey(), generateSessionKey()],
-    maxAge: 24 * 60 * 60 * 1000,
+  session({
+    secret: generateSessionKey(),
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true },
+    store: new MongoStore({
+      mongooseConnection: mongoose.connection,
+      stringify: false,
+    }),
   }),
 );
+
 app.use(express.json());
 app.use("/api", api);
 
