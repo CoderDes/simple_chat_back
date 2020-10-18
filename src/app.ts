@@ -33,7 +33,7 @@ app.use(
   session({
     secret: generateSessionKey(),
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { secure: true },
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
